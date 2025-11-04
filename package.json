@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-confluence-v2",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "n8n community node for Confluence API v2 with hierarchical page fetching",
   "license": "MIT",
   "author": "Crypto-Gi",
@@ -20,7 +20,8 @@
   ],
   "homepage": "https://github.com/Crypto-Gi/n8n-nodes-confluence-v2#readme",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy:icons",
+    "copy:icons": "mkdir -p dist/nodes/ConfluenceV2 && cp nodes/ConfluenceV2/confluence.svg dist/nodes/ConfluenceV2/",
     "dev": "tsc --watch",
     "format": "prettier --write nodes credentials",
     "lint": "eslint nodes credentials --ext .js,.ts",
