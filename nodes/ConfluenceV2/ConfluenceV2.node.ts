@@ -213,6 +213,11 @@ export class ConfluenceV2 implements INodeType {
 					minValue: 1,
 					maxValue: 250,
 				},
+				displayOptions: {
+					show: {
+						operation: ['getPages', 'getHierarchy'],
+					},
+				},
 				description: 'Maximum number of pages to return per request',
 			},
 		],
