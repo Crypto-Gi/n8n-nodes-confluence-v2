@@ -1,6 +1,24 @@
 import { IExecuteFunctions } from 'n8n-core';
 import { IHttpRequestOptions } from 'n8n-workflow';
 
+export interface ConfluenceSpaceV2 {
+	id: string;
+	key: string;
+	name: string;
+	type: string;
+	status: string;
+	authorId: string;
+	createdAt: string;
+	homepageId?: string;
+	description?: {
+		plain?: {
+			value: string;
+		};
+	};
+	_links?: any;
+	[key: string]: any;
+}
+
 export interface ConfluencePageV2 {
 	id: string;
 	title: string;
@@ -60,6 +78,24 @@ export async function apiRequest(
 	} catch (error: any) {
 		throw new Error(`Confluence API Error: ${error.message}`);
 	}
+}
+
+/**
+ * Get all spaces with optional filtering
+ */
+export async function getSpaces(
+	this: IExecuteFunctions,
+	spaceKeys?: string,
+	limit: number = 250,
+): Promise<{ results: ConfluenceSpaceV2[]; _links?: any }> {
+	const endpoint = `/spaces`;
+	const qs: any = { limit };
+	
+	if (spaceKeys) {
+		qs.keys = spaceKeys;
+	}
+	
+	return await apiRequest.call(this, 'GET', endpoint, qs);
 }
 
 /**

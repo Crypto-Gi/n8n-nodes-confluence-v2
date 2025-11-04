@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-confluence-v2",
-  "version": "0.1.2",
-  "description": "n8n community node for Confluence API v2 with hierarchical page fetching",
+  "version": "0.2.0",
+  "description": "n8n community node for Confluence API v2 with spaces listing and hierarchical page fetching",
   "license": "MIT",
   "author": "Crypto-Gi",
   "main": "dist/nodes/ConfluenceV2/ConfluenceV2.node.js",

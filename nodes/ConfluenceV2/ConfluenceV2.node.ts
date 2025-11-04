@@ -5,10 +5,12 @@ import {
 	INodeTypeDescription,
 } from 'n8n-workflow';
 import {
+	getSpaces,
 	getPagesBySpace,
 	buildPageHierarchy,
 	getRootPages,
 	ConfluencePageV2,
+	ConfluenceSpaceV2,
 } from './ConfluenceV2.helpers';
 
 export class ConfluenceV2 implements INodeType {
@@ -40,6 +42,12 @@ export class ConfluenceV2 implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
+						name: 'Get Spaces',
+						value: 'getSpaces',
+						description: 'List all Confluence spaces',
+						action: 'Get spaces',
+					},
+					{
 						name: 'Get Pages in Space',
 						value: 'getPages',
 						description: 'Get all pages in a space (flat list)',
@@ -52,9 +60,36 @@ export class ConfluenceV2 implements INodeType {
 						action: 'Get page hierarchy',
 					},
 				],
-				default: 'getHierarchy',
+				default: 'getSpaces',
 			},
-			// Space ID
+			// Space Keys (for Get Spaces)
+			{
+				displayName: 'Space Keys',
+				name: 'spaceKeys',
+				type: 'string',
+				default: '',
+				placeholder: 'e.g., SPACE1,SPACE2',
+				description: 'Comma-separated list of space keys to filter (leave empty for all spaces)',
+				displayOptions: {
+					show: {
+						operation: ['getSpaces'],
+					},
+				},
+			},
+			// Limit (for Get Spaces)
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				default: 50,
+				description: 'Maximum number of spaces to return',
+				displayOptions: {
+					show: {
+						operation: ['getSpaces'],
+					},
+				},
+			},
+			// Space ID (for page operations)
 			{
 				displayName: 'Space ID',
 				name: 'spaceId',
@@ -63,6 +98,11 @@ export class ConfluenceV2 implements INodeType {
 				placeholder: 'e.g., 123456789',
 				description: 'The ID of the Confluence space',
 				required: true,
+				displayOptions: {
+					show: {
+						operation: ['getPages', 'getHierarchy'],
+					},
+				},
 			},
 			// Include Hierarchy (for getPages operation)
 			{
@@ -185,10 +225,23 @@ export class ConfluenceV2 implements INodeType {
 		for (let i = 0; i < items.length; i++) {
 			try {
 				const operation = this.getNodeParameter('operation', i) as string;
-				const spaceId = this.getNodeParameter('spaceId', i) as string;
-				const limit = this.getNodeParameter('limit', i) as number;
 
-				if (operation === 'getPages') {
+				if (operation === 'getSpaces') {
+					// Get all spaces
+					const spaceKeys = this.getNodeParameter('spaceKeys', i) as string;
+					const limit = this.getNodeParameter('limit', i) as number;
+					
+					const response = await getSpaces.call(this, spaceKeys || undefined, limit);
+					
+					response.results.forEach((space: ConfluenceSpaceV2) => {
+						returnData.push({
+							json: space,
+							pairedItem: i
+						});
+					});
+				} else if (operation === 'getPages') {
+					const spaceId = this.getNodeParameter('spaceId', i) as string;
+					const limit = this.getNodeParameter('limit', i, 250) as number;
 					// Get all pages (flat or with hierarchy)
 					const includeHierarchy = this.getNodeParameter('includeHierarchy', i) as boolean;
 					const response = await getPagesBySpace.call(this, spaceId, limit);
@@ -221,6 +274,8 @@ export class ConfluenceV2 implements INodeType {
 					}
 				} else if (operation === 'getHierarchy') {
 					// Get page hierarchy (only root pages with children)
+					const spaceId = this.getNodeParameter('spaceId', i) as string;
+					const limit = this.getNodeParameter('limit', i, 250) as number;
 					const depthControl = this.getNodeParameter('depthControl', i) as string;
 					const maxDepth = depthControl === 'full' ? -1 : this.getNodeParameter('maxDepth', i) as number;
 
