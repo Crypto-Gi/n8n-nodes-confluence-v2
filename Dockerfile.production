@@ -18,13 +18,13 @@ RUN npm install --include=dev && npm run build
 # Change ownership to node user
 RUN chown -R node:node /usr/local/lib/confluence-node
 
-# Create entrypoint script to link node after volume is mounted
+# Create entrypoint script to install node after volume is mounted
 RUN printf '#!/bin/sh\n\
 set -e\n\
-# Create node_modules directory and link custom node\n\
-mkdir -p /home/node/.n8n/node_modules\n\
-ln -sf /usr/local/lib/confluence-node /home/node/.n8n/node_modules/n8n-nodes-confluence-v2\n\
-chown -R node:node /home/node/.n8n/node_modules\n\
+# Install the custom node package\n\
+cd /home/node/.n8n\n\
+npm install /usr/local/lib/confluence-node --no-save --no-audit --no-fund 2>/dev/null || true\n\
+chown -R node:node /home/node/.n8n\n\
 # Switch to node user and start n8n\n\
 exec su-exec node n8n "$@"\n' > /docker-entrypoint-custom.sh && \
     chmod +x /docker-entrypoint-custom.sh
