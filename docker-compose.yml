@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        GITHUB_REPO: https://github.com/YOUR_USERNAME/n8n-nodes-confluence-v2.git
+        GITHUB_REPO: https://github.com/Crypto-Gi/n8n-nodes-confluence-v2.git
         BRANCH: main
     container_name: n8n-with-confluence
     ports:

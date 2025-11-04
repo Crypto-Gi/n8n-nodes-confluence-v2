@@ -11,7 +11,7 @@ RUN apk add --no-cache git
 USER node
 
 # Clone the repository (will be updated with your GitHub URL)
-ARG GITHUB_REPO=https://github.com/YOUR_USERNAME/n8n-nodes-confluence-v2.git
+ARG GITHUB_REPO=https://github.com/Crypto-Gi/n8n-nodes-confluence-v2.git
 ARG BRANCH=main
 
 RUN git clone --depth 1 --branch ${BRANCH} ${GITHUB_REPO} /tmp/n8n-nodes-confluence-v2
