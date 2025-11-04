@@ -4,8 +4,8 @@ FROM docker.n8n.io/n8nio/n8n:latest
 # Switch to root to install git and setup node
 USER root
 
-# Install git (needed to clone from GitHub)
-RUN apk add --no-cache git
+# Install git and su-exec (needed to clone from GitHub and switch users)
+RUN apk add --no-cache git su-exec
 
 # Clone the Confluence node to a persistent location
 WORKDIR /usr/local/lib
