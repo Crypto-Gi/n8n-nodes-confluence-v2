@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2025-11-03
+
+### Changed
+- **Documentation Update**: Updated README on npm package page
+  - Added Get Spaces operation documentation with examples
+  - Removed Use Cases section
+  - Updated API endpoints list to include `/api/v2/spaces`
+  - Enhanced output examples for all operations
+  - Updated changelog references
+
+### Note
+This is a documentation-only release to update the npm package page. No code changes.
+
 ## [0.2.1] - 2025-11-03
 
 ### Fixed
