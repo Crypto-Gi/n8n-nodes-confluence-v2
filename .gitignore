@@ -32,3 +32,12 @@ coverage/
 *.tmp
 .cache/
 chathistory.txt
+
+# Documentation (consolidated into DOCUMENTATION.md)
+DOCUMENTATION.md
+
+# Docker files (no longer used)
+Dockerfile
+Dockerfile.production
+docker-compose.yml
+docker-compose.production.yml
