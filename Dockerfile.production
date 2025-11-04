@@ -25,13 +25,13 @@ set -e\n\
 mkdir -p /home/node/.n8n/node_modules\n\
 ln -sf /usr/local/lib/confluence-node /home/node/.n8n/node_modules/n8n-nodes-confluence-v2\n\
 chown -R node:node /home/node/.n8n/node_modules\n\
-# Execute original entrypoint\n\
-exec /docker-entrypoint.sh "$@"\n' > /docker-entrypoint-custom.sh && \
+# Switch to node user and start n8n\n\
+exec su-exec node n8n "$@"\n' > /docker-entrypoint-custom.sh && \
     chmod +x /docker-entrypoint-custom.sh
 
 # Return to home directory
 WORKDIR /home/node
 
-# Use custom entrypoint that calls the original (stays as root, original entrypoint will switch to node)
-ENTRYPOINT ["/docker-entrypoint-custom.sh"]
-CMD ["n8n"]
+# Use custom entrypoint
+ENTRYPOINT ["tini", "--", "/docker-entrypoint-custom.sh"]
+CMD []
