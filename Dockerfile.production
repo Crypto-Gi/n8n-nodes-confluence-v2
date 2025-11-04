@@ -18,7 +18,7 @@ RUN git clone --depth 1 https://github.com/Crypto-Gi/n8n-nodes-confluence-v2.git
 
 # Install dependencies and build the node
 WORKDIR /tmp/n8n-nodes-confluence-v2
-RUN npm install && npm run build
+RUN npm install --include=dev && npm run build
 
 # Create node_modules directory if it doesn't exist and link the node
 RUN mkdir -p /home/node/.n8n/node_modules && \
