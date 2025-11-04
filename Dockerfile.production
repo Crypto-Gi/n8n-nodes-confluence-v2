@@ -1,0 +1,30 @@
+# Use official n8n image as base
+FROM docker.n8n.io/n8nio/n8n:latest
+
+# Switch to root to install git
+USER root
+
+# Install git (needed to clone from GitHub)
+RUN apk add --no-cache git
+
+# Switch back to node user for security
+USER node
+
+# Set working directory
+WORKDIR /tmp
+
+# Clone the Confluence node from GitHub
+RUN git clone --depth 1 https://github.com/Crypto-Gi/n8n-nodes-confluence-v2.git
+
+# Install dependencies and build the node
+WORKDIR /tmp/n8n-nodes-confluence-v2
+RUN npm install && npm run build
+
+# Create node_modules directory if it doesn't exist and link the node
+RUN mkdir -p /home/node/.n8n/node_modules && \
+    ln -s /tmp/n8n-nodes-confluence-v2 /home/node/.n8n/node_modules/n8n-nodes-confluence-v2
+
+# Return to home directory
+WORKDIR /home/node
+
+# The rest (CMD, EXPOSE, etc.) is inherited from the base n8n image
