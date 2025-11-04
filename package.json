@@ -1,10 +1,24 @@
 {
   "name": "n8n-nodes-confluence-v2",
   "version": "0.1.0",
-  "description": "n8n node for Confluence API v2",
+  "description": "n8n community node for Confluence API v2 with hierarchical page fetching",
   "license": "MIT",
-  "author": "",
+  "author": "Crypto-Gi",
   "main": "dist/nodes/ConfluenceV2/ConfluenceV2.node.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Crypto-Gi/n8n-nodes-confluence-v2.git"
+  },
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "confluence",
+    "atlassian",
+    "api-v2",
+    "workflow",
+    "automation"
+  ],
+  "homepage": "https://github.com/Crypto-Gi/n8n-nodes-confluence-v2#readme",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
