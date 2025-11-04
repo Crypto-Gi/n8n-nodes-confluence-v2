@@ -20,22 +20,39 @@ Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes
 
 ## Operations
 
+### Get Spaces
+List all Confluence spaces or filter by specific space keys.
+
+**Options:**
+- **Space Keys**: Comma-separated list of space keys to filter (e.g., `SPACE1,SPACE2`). Leave empty to retrieve all spaces.
+- **Limit**: Maximum number of spaces to return (default: 50, max: 250)
+
+**Output:**
+Returns space metadata including:
+- Space ID, key, name, and type (personal/global)
+- Owner ID and author ID
+- Creation date and status
+- Homepage ID and description
+- Web UI links
+
 ### Get Pages in Space
 Get all pages in a Confluence space as a flat list.
 
 **Options:**
+- **Space ID**: The ID of the Confluence space (required)
 - **Include Hierarchy**: Optionally fetch children for each page
 - **Depth Control**: Full depth or limited depth
 - **Max Depth**: Limit how many levels deep to fetch (1-10)
-- **Limit**: Number of pages per request (max 250)
+- **Limit**: Number of pages per request (default: 250, max: 250)
 
 ### Get Page Hierarchy
 Get pages organized in their folder structure (hierarchical tree).
 
 **Options:**
+- **Space ID**: The ID of the Confluence space (required)
 - **Depth Control**: Full depth or limited depth
 - **Max Depth**: Limit how many levels deep to fetch (1-10)
-- **Limit**: Number of pages per request (max 250)
+- **Limit**: Number of pages per request (default: 250, max: 250)
 
 ## Credentials
 
@@ -48,7 +65,26 @@ This node requires Confluence API credentials:
 
 ## Output Structure
 
-### Flat List (Get Pages)
+### Get Spaces
+```json
+{
+  "id": "196610",
+  "key": "~7120203b4741fcaf6a40e4bed1d04bcdb2f7f7",
+  "name": "Abdul Wasay Mir",
+  "type": "personal",
+  "status": "current",
+  "spaceOwnerId": "712020:3b4741fc-af6a-40e4-bed1-d04bcdb2f7f7",
+  "authorId": "712020:3b4741fc-af6a-40e4-bed1-d04bcdb2f7f7",
+  "createdAt": "2025-11-03T21:23:21.076Z",
+  "homepageId": "196710",
+  "description": null,
+  "_links": {
+    "webui": "/spaces/~7120203b4741fcaf6a40e4bed1d04bcdb2f7f7"
+  }
+}
+```
+
+### Get Pages (Flat List)
 ```json
 {
   "id": "123456",
@@ -63,7 +99,7 @@ This node requires Confluence API credentials:
 }
 ```
 
-### Hierarchical (Get Page Hierarchy)
+### Get Page Hierarchy
 ```json
 {
   "id": "123456",
@@ -84,26 +120,13 @@ This node requires Confluence API credentials:
 }
 ```
 
-## Use Cases
-
-### 1. Migrate Confluence Content
-Preserve folder structure when copying pages between spaces or instances.
-
-### 2. Build RAG Systems
-Extract hierarchical content for vector databases and AI applications.
-
-### 3. Content Auditing
-Analyze page structures and relationships.
-
-### 4. Automated Documentation
-Generate documentation maps from Confluence spaces.
-
 ## API Version
 
 This node uses **Confluence REST API v2** endpoints:
-- `/api/v2/spaces/{id}/pages`
-- `/api/v2/pages/{id}/children`
-- `/api/v2/pages/{id}`
+- `/api/v2/spaces` - List spaces
+- `/api/v2/spaces/{id}/pages` - Get pages in space
+- `/api/v2/pages/{id}/children` - Get page children
+- `/api/v2/pages/{id}` - Get single page
 
 ## Compatibility
 
@@ -136,6 +159,16 @@ npm run lint
 For issues and feature requests, please visit the [GitHub repository](https://github.com/yourusername/n8n-nodes-confluence-v2).
 
 ## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
+
+### Latest: 0.2.1
+- Fixed duplicate Limit parameter on Get Spaces operation
+- Icon display working correctly
+
+### 0.2.0
+- Added Get Spaces operation with filtering support
+- List all Confluence spaces or filter by space keys
 
 ### 0.1.0 (Initial Release)
 - V2 API support
