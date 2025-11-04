@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-confluence-v2",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "n8n community node for Confluence API v2 with hierarchical page fetching",
   "license": "MIT",
   "author": "Crypto-Gi",
@@ -28,7 +28,8 @@
     "prepublishOnly": "npm run build"
   },
   "files": [
-    "dist"
+    "dist",
+    "nodes"
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
