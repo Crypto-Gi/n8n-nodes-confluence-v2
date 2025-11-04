@@ -19,10 +19,13 @@ RUN npm install --include=dev && npm run build
 RUN chown -R node:node /usr/local/lib/confluence-node
 
 # Create entrypoint script to link node after volume is mounted
-USER root
 RUN echo '#!/bin/sh' > /docker-entrypoint-custom.sh && \
+    echo 'set -e' >> /docker-entrypoint-custom.sh && \
+    echo '# Create node_modules directory and link custom node' >> /docker-entrypoint-custom.sh && \
     echo 'mkdir -p /home/node/.n8n/node_modules' >> /docker-entrypoint-custom.sh && \
     echo 'ln -sf /usr/local/lib/confluence-node /home/node/.n8n/node_modules/n8n-nodes-confluence-v2' >> /docker-entrypoint-custom.sh && \
+    echo 'chown -R node:node /home/node/.n8n/node_modules' >> /docker-entrypoint-custom.sh && \
+    echo '# Execute original entrypoint' >> /docker-entrypoint-custom.sh && \
     echo 'exec /docker-entrypoint.sh "$@"' >> /docker-entrypoint-custom.sh && \
     chmod +x /docker-entrypoint-custom.sh
 
@@ -32,6 +35,6 @@ USER node
 # Return to home directory
 WORKDIR /home/node
 
-# Use custom entrypoint
+# Use custom entrypoint that calls the original
 ENTRYPOINT ["/docker-entrypoint-custom.sh"]
 CMD ["n8n"]
